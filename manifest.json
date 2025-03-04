@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Element Screenshot Tool",
+  "version": "1.0",
+  "description": "마우스 오버한 HTML 요소를 하이라이트하고 스크린샷하는 기능",
+  "permissions": ["activeTab", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_title": "스크린샷 툴"
+  }
+}
