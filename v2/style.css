@@ -1,0 +1,33 @@
+/* 전체 배경과 폰트 설정 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #2b5876, #4e4376); /* 미래지향적 그라데이션 */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+}
+
+/* 팝업 컨테이너 중앙 정렬 */
+.popup-container {
+  text-align: center;
+}
+
+/* 스크린샷 버튼 스타일 */
+button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}

@@ -1,0 +1,199 @@
+/* Smart Screenshot Content Styles */
+
+/* Custom cursor for screenshot mode - pointer (hand) style */
+body.smart-screenshot-mode {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%236366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3l8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>') 5 0, pointer !important;
+}
+
+/* Base highlight styles */
+.smart-screenshot-highlight {
+  box-sizing: border-box;
+  pointer-events: none !important;
+  transition: all 0.2s ease-out;
+}
+
+/* SVG 테두리 컨테이너 스타일 */
+.svg-border-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* 점선 테두리 애니메이션 효과 */
+@keyframes dash-animation {
+  to {
+    stroke-dashoffset: 16;
+  }
+}
+
+/* SVG 테두리 점선 애니메이션 */
+.svg-border-container svg line,
+.svg-border-container svg rect,
+.svg-border-container svg circle,
+.svg-border-container svg ellipse,
+.svg-border-container svg path,
+.svg-border-container svg polygon {
+  animation: dash-animation 20s linear infinite;
+}
+
+/* 점선 테두리 스타일 */
+.smart-screenshot-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 2px dashed transparent;
+}
+
+/* 다크 오버레이 구멍에 점선 테두리 효과 추가 */
+.dark-overlay-hole {
+  position: absolute;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+/* 다크 오버레이 구멍 점선 테두리 */
+/*.dark-overlay-hole::after {*/
+/*  content: '';*/
+/*  position: absolute;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  border: 2px dashed rgba(255, 255, 255, 0.7);*/
+/*  box-sizing: border-box;*/
+/*  border-radius: inherit;*/
+/*  pointer-events: none;*/
+/*}*/
+
+/* 어두운 오버레이 효과 */
+#smart-screenshot-dark-overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+  /*backdrop-filter: blur(1px);*/
+  transition: all 0.3s ease;
+}
+
+/* 클립패스 요소 테두리 효과 */
+.smart-screenshot-clip-border {
+  box-sizing: border-box;
+  position: relative;
+}
+
+.smart-screenshot-clip-border::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px dashed;
+  border-image: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef) 1;
+  box-sizing: border-box;
+  animation: borderAnimation 3s linear infinite;
+}
+
+/* 그라데이션 테두리 애니메이션 */
+@keyframes borderAnimation {
+  0% {
+    border-image-source: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef);
+  }
+  33% {
+    border-image-source: linear-gradient(90deg, #8b5cf6, #d946ef, #f97316);
+  }
+  66% {
+    border-image-source: linear-gradient(90deg, #d946ef, #f97316, #6366f1);
+  }
+  100% {
+    border-image-source: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef);
+  }
+}
+
+/* 회전 그라데이션 애니메이션 (원/타원형) */
+@keyframes rotateGradient {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 캡처 애니메이션 효과 */
+@keyframes screenshot-capture-flash {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    opacity: 0.6;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+    background-color: rgba(255, 255, 255, 0);
+  }
+}
+
+/* 캡처 애니메이션 클래스 */
+.smart-screenshot-capture-animation {
+  position: fixed;
+  pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.3);
+  border: 2px dashed #8b5cf6;
+  z-index: 2147483646;
+  animation: screenshot-capture-flash 0.5s ease-out forwards;
+}
+
+/* 점선 테두리 Polyfill (브라우저 호환성을 위한) */
+@supports not (border: 2px dashed transparent) {
+  .dark-overlay-hole::after {
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.7),
+      rgba(255, 255, 255, 0.7) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+}
+
+/* 안내 메시지 스타일 */
+.smart-screenshot-info {
+  position: absolute;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: white;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 2147483647;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* 종료 메시지 스타일 */
+#smart-screenshot-exit-message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 50px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 14px;
+  z-index: 999999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}

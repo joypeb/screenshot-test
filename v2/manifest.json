@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Screenshot",
+  "version": "1.0",
+  "description": "웹 페이지의 원하는 영역을 고해상도로 캡처하는 크롬 확장 프로그램",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ]
+}
