@@ -1,0 +1,72 @@
+/**
+ * 스마트 스크린샷 확장 프로그램 - 콘텐츠 스타일
+ * 스크린샷 모드에서 요소 강조 표시 및 사용자 인터페이스를 위한 CSS
+ */
+
+/* Base highlight style */
+.ss-highlight {
+  position: absolute;
+  z-index: 99999;
+  pointer-events: none;
+  /* 전환 효과 제거 - 개선점 1: 바로 정확한 모양 표시 */
+}
+
+/* Shape-specific highlight styles */
+.ss-highlight-rectangle {
+  border: 2px solid #4285f4;
+}
+
+.ss-highlight-circle {
+  border: 2px solid #4285f4;
+  border-radius: 50%;
+}
+
+.ss-highlight-ellipse {
+  border: 2px solid #4285f4;
+  /* The actual ellipse shape will be set dynamically in JS */
+}
+
+.ss-highlight-complex {
+  border: 2px solid #4285f4;
+  /* For complex shapes, we'll use SVG or Canvas */
+}
+
+/* Capture mode cursor */
+.ss-capturing {
+  cursor: crosshair !important;
+}
+
+/* Selected element style */
+.ss-selected {
+  border-color: #0f9d58;
+}
+
+/* Toolbar styles */
+.ss-toolbar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  z-index: 100000;
+  display: flex;
+  gap: 8px;
+}
+
+.ss-toolbar button {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.ss-toolbar button.ss-cancel {
+  background-color: #f1f1f1;
+  color: #333;
+}

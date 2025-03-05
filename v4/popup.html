@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Screenshot</title>
+  <!-- 심플한 다크모드 스타일을 위한 CSS 연결 -->
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="container">
+    <h1>Smart Screenshot</h1>
+    <!-- 스크린샷 실행 버튼 -->
+    <button id="screenshotBtn">스크린샷</button>
+    <!-- 저장 옵션 및 포맷 선택 -->
+    <div id="options">
+      <label for="formatSelect">포맷:</label>
+      <select id="formatSelect">
+        <option value="png">PNG</option>
+        <option value="jpg">JPG</option>
+      </select>
+
+      <label for="saveOptionSelect">저장 옵션:</label>
+      <select id="saveOptionSelect">
+        <option value="file">파일 저장</option>
+        <option value="clipboard">클립보드 복사</option>
+        <option value="cloud">클라우드 업로드</option>
+      </select>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

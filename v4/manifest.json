@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Screenshot",
+  "version": "1.0",
+  "description": "웹 페이지의 특정 요소를 다양한 모양(사각형, 원, 타원 등)으로 고해상도 캡처하는 크롬 확장 프로그램",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "downloads",
+    "tabs"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "web_accessible_resources": [{
+    "resources": ["screenshotMode.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
