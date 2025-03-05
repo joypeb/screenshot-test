@@ -12,21 +12,21 @@
 
 /* 모양별 강조 스타일 */
 .ss-highlight-rectangle {
-  border: 2px solid #4285f4;
+  border: 3px solid #ff5252;
 }
 
 .ss-highlight-circle {
-  border: 2px solid #4285f4;
+  border: 3px solid #ff5252;
   border-radius: 50%;
 }
 
 .ss-highlight-ellipse {
-  border: 2px solid #4285f4;
+  border: 3px solid #ff5252;
   /* 실제 타원 모양은 JS에서 동적으로 설정됨 */
 }
 
 .ss-highlight-complex {
-  border: 2px solid #4285f4;
+  border: 3px solid #ff5252;
   /* 복잡한 모양의 경우 SVG 또는 Canvas 사용 */
 }
 
@@ -64,7 +64,7 @@
 }
 
 .ss-toolbar button {
-  background-color: #4285f4;
+  background-color: #ff5252;
   color: white;
   border: none;
   border-radius: 4px;
