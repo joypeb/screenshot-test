@@ -8,10 +8,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
         chrome.tabs.sendMessage(tabs[0].id, { action: 'activateScreenshotMode' }, () => {
-          sendResponse(); // 응답 호출
+          try {
+            sendResponse();
+          } catch (e) {}
         });
       } else {
-        sendResponse();
+        try {
+          sendResponse();
+        } catch (e) {}
       }
     });
     return true;
@@ -19,15 +23,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     chrome.tabs.captureVisibleTab(null, { format: 'png' }, (dataUrl) => {
       if (chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError.message);
-        sendResponse({ dataUrl: null });
+        try {
+          sendResponse({ dataUrl: null });
+        } catch (e) {}
       } else {
-        sendResponse({ dataUrl: dataUrl });
+        try {
+          sendResponse({ dataUrl: dataUrl });
+        } catch (e) {}
       }
     });
     return true;
   } else if (message.action === 'downloadScreenshot') {
     downloadScreenshot(message.dataUrl, message.filename);
-    sendResponse(); // 응답 호출
+    try {
+      sendResponse();
+    } catch (e) {}
   }
   return false;
 });
