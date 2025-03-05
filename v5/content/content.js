@@ -22,7 +22,7 @@ let disableAnimationsStyle = null; // 비활성화 스타일 요소
   }
 })();
 
-function activateScreenshotMode() {
+async function activateScreenshotMode() {
   isScreenshotMode = true;
   document.body.classList.add('ss-capturing');
 
@@ -32,13 +32,11 @@ function activateScreenshotMode() {
   document.body.appendChild(highlightElement);
 
   getCurrentBrowserZoom();
-  createToolbar();
+  await createToolbar();
 
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('click', handleClick);
   document.addEventListener('keydown', handleKeyDown);
-
-  console.log('스크린샷 모드가 활성화되었습니다');
 }
 
 function getCurrentBrowserZoom() {
@@ -49,21 +47,61 @@ function getCurrentBrowserZoom() {
   const zoomLevel = Math.round((rect.width / 100) * 100) / 100;
   document.body.removeChild(testElement);
   window.browserZoomLevel = zoomLevel;
-  console.log('감지된 브라우저 확대/축소 수준:', zoomLevel);
   return zoomLevel;
 }
 
-function createToolbar() {
+// 다국어 메시지
+const translations = {
+  en: {
+    escToExit: 'Press ESC key to exit screenshot mode',
+    cancel: 'Cancel'
+  },
+  ko: {
+    escToExit: 'ESC 키를 눌러 스크린샷 모드를 종료할 수 있습니다',
+    cancel: '취소'
+  },
+  ja: {
+    escToExit: 'ESCキーでスクリーンショットモードを終了できます',
+    cancel: 'キャンセル'
+  },
+  zh: {
+    escToExit: '按ESC键退出截图模式',
+    cancel: '取消'
+  }
+};
+
+// 현재 언어 가져오기 (기본값: 영어)
+let currentLang = 'en';
+
+function getCurrentLanguage() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['language'], (result) => {
+      currentLang = result.language || 'en';
+      resolve(currentLang);
+    });
+  });
+}
+
+// 텍스트 번역 유틸리티 함수
+function getTranslatedText(key) {
+  return (translations[currentLang] && translations[currentLang][key]) ||
+         translations.en[key]; // 번역이 없으면 영어로 폴백
+}
+
+async function createToolbar() {
+  // 언어 설정 가져오기
+  await getCurrentLanguage();
+
   toolbar = document.createElement('div');
   toolbar.className = 'ss-toolbar';
   toolbar.style.display = 'none';
 
   const infoText = document.createElement('span');
-  infoText.textContent = 'ESC 키를 눌러 스크린샷 모드를 종료할 수 있습니다';
-  infoText.style.cssText = 'color:#333;padding:8px';
+  infoText.textContent = getTranslatedText('escToExit');
+  infoText.style.cssText = 'color:white;padding:8px';
 
   const cancelBtn = document.createElement('button');
-  cancelBtn.textContent = '취소';
+  cancelBtn.textContent = getTranslatedText('cancel');
   cancelBtn.className = 'ss-cancel';
   cancelBtn.addEventListener('click', cancelScreenshotMode);
 
@@ -200,7 +238,6 @@ function storeElementDetails(element) {
       timestamp: Date.now()
     }
   };
-  console.log('저장된 요소 세부정보:', window.selectedElementDetails);
 }
 
 function handleKeyDown(event) {
@@ -409,7 +446,6 @@ function exitScreenshotMode() {
   }
   document.body.classList.remove('ss-capturing');
   chrome.storage.local.set({ screenshotActive: false });
-  console.log('스크린샷 모드가 비활성화되었습니다');
 }
 
 function saveScreenshot() {
@@ -417,10 +453,10 @@ function saveScreenshot() {
 }
 
 // 메시지 수신 처리
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   switch (message.action) {
     case 'activateScreenshotMode':
-      activateScreenshotMode();
+      await activateScreenshotMode();
       break;
     case 'cancelScreenshot':
       cancelScreenshotMode();
@@ -428,6 +464,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case 'saveScreenshot':
       saveScreenshot();
       break;
+    case 'languageChanged':
+      // 언어가 변경되면 현재 언어 업데이트
+      if (message.language) {
+        currentLang = message.language;
+        // 툴바가 보이는 상태라면 텍스트 업데이트
+        if (toolbar && toolbar.style.display !== 'none') {
+          const infoText = toolbar.querySelector('span');
+          const cancelBtn = toolbar.querySelector('button');
+          if (infoText) infoText.textContent = getTranslatedText('escToExit');
+          if (cancelBtn) cancelBtn.textContent = getTranslatedText('cancel');
+        }
+      }
+      break;
   }
+  // sendResponse를 지원하기 위해 true 반환
   return true;
 });

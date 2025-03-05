@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>스마트 스크린샷</title>
+  <title>Smart Screenshot</title>
   <link rel="stylesheet" href="popup.css">
   <meta charset="UTF-8">
 </head>
 <body>
   <div class="container">
-    <h1>스마트 스크린샷</h1>
-    <button id="startScreenshot" class="button">스크린샷 시작</button>
+    <h1 id="title">Smart Screenshot</h1>
+    <button id="startScreenshot" class="button" data-i18n="startScreenshot">Take Screenshot</button>
     <div id="captureOptions" class="hidden">
-      <button id="saveScreenshot" class="button">저장</button>
-      <button id="cancelScreenshot" class="button secondary">취소</button>
+      <button id="saveScreenshot" class="button" data-i18n="saveScreenshot">Save</button>
+      <button id="cancelScreenshot" class="button secondary" data-i18n="cancelScreenshot">Cancel</button>
+    </div>
+
+    <div class="language-selector">
+      <button class="language-option" data-lang="en">EN</button>
+      <button class="language-option" data-lang="ko">KO</button>
+      <button class="language-option" data-lang="ja">JA</button>
+      <button class="language-option" data-lang="zh">ZH</button>
     </div>
   </div>
   <script src="popup.js"></script>
