@@ -4,36 +4,25 @@
  */
 
 const startButton = document.getElementById('startScreenshot');
-const captureOptions = document.getElementById('captureOptions');
-const saveButton = document.getElementById('saveScreenshot');
-const cancelButton = document.getElementById('cancelScreenshot');
 const languageOptions = document.querySelectorAll('.language-option');
 
 // 지원 언어 및 번역
 const translations = {
   en: {
     title: 'Smart Screenshot',
-    startScreenshot: 'Take Screenshot',
-    saveScreenshot: 'Save',
-    cancelScreenshot: 'Cancel'
+    startScreenshot: 'Take Screenshot'
   },
   ko: {
     title: '스마트 스크린샷',
-    startScreenshot: '스크린샷 시작',
-    saveScreenshot: '저장',
-    cancelScreenshot: '취소'
+    startScreenshot: '스크린샷 시작'
   },
   ja: {
     title: 'スマートスクリーンショット',
-    startScreenshot: 'スクリーンショット撮影',
-    saveScreenshot: '保存',
-    cancelScreenshot: 'キャンセル'
+    startScreenshot: 'スクリーンショット撮影'
   },
   zh: {
     title: '智能截图',
-    startScreenshot: '开始截图',
-    saveScreenshot: '保存',
-    cancelScreenshot: '取消'
+    startScreenshot: '开始截图'
   }
 };
 
@@ -48,18 +37,8 @@ function initPopup() {
     highlightSelectedLanguage(currentLang);
   });
 
-  // 스크린샷 활성화 상태 확인
-  chrome.storage.local.get(['screenshotActive'], (result) => {
-    if (result.screenshotActive) {
-      startButton.classList.add('hidden');
-      captureOptions.classList.remove('hidden');
-    }
-  });
-
   // 이벤트 리스너 설정
   startButton.addEventListener('click', startScreenshotMode);
-  saveButton.addEventListener('click', saveScreenshot);
-  cancelButton.addEventListener('click', cancelScreenshot);
 
   // 언어 선택 이벤트 리스너
   languageOptions.forEach(option => {
@@ -125,8 +104,6 @@ function startScreenshotMode() {
         target: { tabId: currentTab.id },
         function: injectScreenshotMode
       });
-      startButton.classList.add('hidden');
-      captureOptions.classList.remove('hidden');
       window.close();
     });
   });
@@ -137,29 +114,6 @@ function startScreenshotMode() {
  */
 function injectScreenshotMode() {
   chrome.runtime.sendMessage({ action: 'activateScreenshotMode' });
-}
-
-/**
- * 캡처된 스크린샷 저장
- */
-function saveScreenshot() {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: 'saveScreenshot' });
-    chrome.storage.local.set({ screenshotActive: false });
-    window.close();
-  });
-}
-
-/**
- * 스크린샷 모드 취소
- */
-function cancelScreenshot() {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: 'cancelScreenshot' });
-    chrome.storage.local.set({ screenshotActive: false });
-    startButton.classList.remove('hidden');
-    captureOptions.classList.add('hidden');
-  });
 }
 
 document.addEventListener('DOMContentLoaded', initPopup);
