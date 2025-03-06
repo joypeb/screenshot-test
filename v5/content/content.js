@@ -35,7 +35,9 @@ async function activateScreenshotMode() {
   await createToolbar();
 
   document.addEventListener('mousemove', handleMouseMove);
-  document.addEventListener('click', handleClick);
+  document.addEventListener('click', handleClick, true);
+  document.addEventListener('mousedown', handleMouseDown, true);
+  document.addEventListener('mouseup', handleMouseUp, true);
   document.addEventListener('keydown', handleKeyDown);
 }
 
@@ -192,14 +194,35 @@ function handleMouseMove(event) {
   }
 }
 
-function handleClick(event) {
+function handleMouseDown(event) {
   if (!isScreenshotMode) return;
   event.preventDefault();
   event.stopPropagation();
+  event.stopImmediatePropagation(); // 동일한 요소에 연결된 다른 리스너도 중지
+  return false;
+}
+
+function handleMouseUp(event) {
+  if (!isScreenshotMode) return;
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+  return false;
+}
+
+function handleClick(event) {
+  if (!isScreenshotMode) return;
+
+  // 이벤트 전파 완전히 중단
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+
   const elements = document.elementsFromPoint(event.clientX, event.clientY);
   const targetElement = elements.find(el =>
     !el.classList.contains('ss-highlight') &&
     !el.classList.contains('ss-toolbar'));
+
   if (targetElement) {
     selectedElement = targetElement;
     // 선택된 요소에 예외 처리를 위해 클래스 추가
@@ -208,6 +231,8 @@ function handleClick(event) {
     highlightElement.classList.add('ss-selected');
     captureSelectedElement();
   }
+
+  return false; // 이벤트 처리 완전히 중단
 }
 
 function storeElementDetails(element) {
@@ -433,7 +458,9 @@ function exitScreenshotMode() {
   elementShape = null;
 
   document.removeEventListener('mousemove', handleMouseMove);
-  document.removeEventListener('click', handleClick);
+  document.removeEventListener('click', handleClick, true); // true 파라미터 추가
+  document.removeEventListener('mousedown', handleMouseDown, true);
+  document.removeEventListener('mouseup', handleMouseUp, true);
   document.removeEventListener('keydown', handleKeyDown);
 
   if (highlightElement && highlightElement.parentNode) {
